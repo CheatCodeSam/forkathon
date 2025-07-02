@@ -1,26 +1,45 @@
-name: Deploy netlify site
+# .github/workflows/deploy.yml
+name: Deploy Netlify Site
+
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-steps:
-  - uses: actions/checkout@v3
-  - name: Setup NodeJS
-    uses: actions/setup-node@v4
-    with:
-      node-version: 24
-  - run: mkdir dist
-  - uses: docker://pandoc/core:3.7.0.2-alpine
-    with:
-      args: >-
-        --standalone
-        --template=template.html
-        --metadata=lang=en
-        -M updated=$(date)
-        -o ./src/output.html
-        index.md
-  - run: npm install netlify-cli@22.2.1 -g
-  - run: netlify deploy --dir dist
-    env:
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Create dist directory
+        run: mkdir -p dist
+
+      - name: Render site with Pandoc
+        uses: docker://pandoc/core:3.7.0.2-alpine
+        with:
+          args: >
+            --standalone
+            --template=template.html
+            --metadata=lang=en
+            --metadata=updated="$(date)"
+            -o dist/index.html
+            index.md
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli@22.2.1
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID:   ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          netlify deploy \
+            --prod \
+            --dir=dist
