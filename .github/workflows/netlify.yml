@@ -13,6 +13,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create dist directory
         run: mkdir -p dist
+      - run: 
       - name: Render site with Pandoc
         uses: docker://pandoc/core:3.7.0.2-alpine
         with:
@@ -20,7 +21,7 @@ jobs:
             --standalone
             --template=template.html
             --metadata=lang=en
-            --metadata=updated="$(date)"
+            --metadata=updated=$(date)
             -o dist/index.html
             index.md
       - name: Deploy to Netlify
