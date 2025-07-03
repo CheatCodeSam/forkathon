@@ -8,18 +8,15 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    environment: production
     steps:
       - uses: actions/checkout@v3
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
-
       - name: Create dist directory
         run: mkdir -p dist
-
       - name: Render site with Pandoc
         uses: docker://pandoc/core:3.7.0.2-alpine
         with:
@@ -30,10 +27,8 @@ jobs:
             --metadata=updated="$(date)"
             -o dist/index.html
             index.md
-
       - name: Install Netlify CLI
         run: npm install -g netlify-cli@22.2.1
-
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
