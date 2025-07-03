@@ -13,7 +13,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create dist directory
         run: mkdir -p dist
-      - run: 
       - name: Render site with Pandoc
         uses: docker://pandoc/core:3.7.0.2-alpine
         with:
