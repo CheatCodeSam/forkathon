@@ -13,7 +13,7 @@ source lifecycle such as code reviews, documentation, and creating discussions.
 Visit us!
 
 [Meetup](https://www.meetup.com/forkathon-new-york/) |
-[Luma](https://lu.ma/forkathon-ny)
+[Luma](https://lu.ma/forkathon-new-york)
 
 Contact Me!
 
