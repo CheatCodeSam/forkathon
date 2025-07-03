@@ -20,7 +20,7 @@ jobs:
             --standalone
             --template=template.html
             --metadata=lang=en
-            --metadata=updated=$(date)
+            --metadata=updated=${{ github.event.repository.pushed_at}}
             -o dist/index.html
             index.md
       - name: Deploy to Netlify
