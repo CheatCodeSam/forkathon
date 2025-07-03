@@ -11,8 +11,8 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v3
-      - name: Create dist directory
-        run: mkdir -p dist
+      - run: echo "NOW=$(date)" >> $GITHUB_ENV
+      - run: mkdir -p dist
       - name: Render site with Pandoc
         uses: docker://pandoc/core:3.7.0.2-alpine
         with:
@@ -20,7 +20,7 @@ jobs:
             --standalone
             --template=template.html
             --metadata=lang=en
-            --metadata=updated=${{ github.event.repository.pushed_at}}
+            --metadata=updated=$NOW
             -o dist/index.html
             index.md
       - name: Deploy to Netlify
